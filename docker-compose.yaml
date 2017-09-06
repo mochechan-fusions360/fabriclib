@@ -1,0 +1,298 @@
+version: '2'
+networks:
+  fusions:
+
+services:
+  zookeeper1:
+    image: hyperledger/fabric-zookeeper
+    container_name: zookeeper1
+    hostname: zookeeper1
+    environment:
+      - ZOO_USER=zookeeper #default
+      - ZOO_CONF_DIR=/conf #default
+      - ZOO_DATA_DIR=/data #default
+      - ZOO_DATA_LOG_DIR=/datalog #default
+      - ZOO_PORT=2181 #default
+      - ZOO_TICK_TIME=2000 #default
+      - ZOO_INIT_LIMIT=5 #default
+      - ZOO_SYNC_LIMIT=2 #default
+      - ZOO_MY_ID=1 #customize
+      - ZOO_SERVERS=server.1=zookeeper1:2888:3888 server.2=zookeeper2:2888:3888 server.3=zookeeper3:2888:3888 server.4=zookeeper4:2888:3888 server.5=zookeeper5:2888:3888 #customize
+
+    
+  zookeeper2:
+    image: hyperledger/fabric-zookeeper
+    container_name: zookeeper2
+    hostname: zookeeper2
+    environment:
+      - ZOO_USER=zookeeper
+      - ZOO_CONF_DIR=/conf
+      - ZOO_DATA_DIR=/data
+      - ZOO_DATA_LOG_DIR=/datalog
+      - ZOO_PORT=2181
+      - ZOO_TICK_TIME=2000
+      - ZOO_INIT_LIMIT=5
+      - ZOO_SYNC_LIMIT=2
+      - ZOO_MY_ID=2 #customize
+      - ZOO_SERVERS=server.1=zookeeper1:2888:3888 server.2=zookeeper2:2888:3888 server.3=zookeeper3:2888:3888 server.4=zookeeper4:2888:3888 server.5=zookeeper5:2888:3888 #customize
+
+  
+  zookeeper3:
+    image: hyperledger/fabric-zookeeper
+    container_name: zookeeper3
+    hostname: zookeeper3
+    environment:
+      - ZOO_USER=zookeeper
+      - ZOO_CONF_DIR=/conf
+      - ZOO_DATA_DIR=/data
+      - ZOO_DATA_LOG_DIR=/datalog
+      - ZOO_PORT=2181
+      - ZOO_TICK_TIME=2000
+      - ZOO_INIT_LIMIT=5
+      - ZOO_SYNC_LIMIT=2
+      - ZOO_MY_ID=3 #customize
+      - ZOO_SERVERS=server.1=zookeeper1:2888:3888 server.2=zookeeper2:2888:3888 server.3=zookeeper3:2888:3888 server.4=zookeeper4:2888:3888 server.5=zookeeper5:2888:3888 #customize
+
+
+  zookeeper4:
+    image: hyperledger/fabric-zookeeper
+    container_name: zookeeper4
+    hostname: zookeeper4
+    environment:
+      - ZOO_USER=zookeeper
+      - ZOO_CONF_DIR=/conf
+      - ZOO_DATA_DIR=/data
+      - ZOO_DATA_LOG_DIR=/datalog
+      - ZOO_PORT=2181
+      - ZOO_TICK_TIME=2000
+      - ZOO_INIT_LIMIT=5
+      - ZOO_SYNC_LIMIT=2
+      - ZOO_MY_ID=4 #customize
+      - ZOO_SERVERS=server.1=zookeeper1:2888:3888 server.2=zookeeper2:2888:3888 server.3=zookeeper3:2888:3888 server.4=zookeeper4:2888:3888 server.5=zookeeper5:2888:3888 #customize
+
+
+  zookeeper5:
+    image: hyperledger/fabric-zookeeper
+    container_name: zookeeper5
+    hostname: zookeeper5
+    environment:
+      - ZOO_USER=zookeeper
+      - ZOO_CONF_DIR=/conf
+      - ZOO_DATA_DIR=/data
+      - ZOO_DATA_LOG_DIR=/datalog
+      - ZOO_PORT=2181
+      - ZOO_TICK_TIME=2000
+      - ZOO_INIT_LIMIT=5
+      - ZOO_SYNC_LIMIT=2
+      - ZOO_MY_ID=5 #customize
+      - ZOO_SERVERS=server.1=zookeeper1:2888:3888 server.2=zookeeper2:2888:3888 server.3=zookeeper3:2888:3888 server.4=zookeeper4:2888:3888 server.5=zookeeper5:2888:3888 #customize
+
+
+  kafka1:
+    image: hyperledger/fabric-kafka
+    container_name: kafka1
+    hostname: kafka1
+    environment:
+      - KAFKA_MESSAGE_MAX_BYTES=103809024
+      - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+      - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+      - KAFKA_LOG_RETENTION_MS=-1
+      - KAFKA_BROKER_ID=1 #customize
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper1:2181,zookeeper2:2181,zookeeper3:2181,zookeeper4:2181,zookeeper5:2181
+
+
+  kafka2:
+    image: hyperledger/fabric-kafka
+    container_name: kafka2
+    hostname: kafka2
+    environment:
+      - KAFKA_MESSAGE_MAX_BYTES=103809024
+      - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+      - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+      - KAFKA_LOG_RETENTION_MS=-1
+      - KAFKA_BROKER_ID=2 #customize
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper1:2181,zookeeper2:2181,zookeeper3:2181,zookeeper4:2181,zookeeper5:2181
+
+
+  kafka3:
+    image: hyperledger/fabric-kafka
+    container_name: kafka3
+    hostname: kafka3
+    environment:
+      - KAFKA_MESSAGE_MAX_BYTES=103809024
+      - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+      - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+      - KAFKA_LOG_RETENTION_MS=-1
+      - KAFKA_BROKER_ID=3 #customize
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper1:2181,zookeeper2:2181,zookeeper3:2181,zookeeper4:2181,zookeeper5:2181
+
+
+  kafka4:
+    image: hyperledger/fabric-kafka
+    container_name: kafka4
+    hostname: kafka4
+    environment:
+      - KAFKA_MESSAGE_MAX_BYTES=103809024
+      - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+      - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+      - KAFKA_LOG_RETENTION_MS=-1
+      - KAFKA_BROKER_ID=4 #customize
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper1:2181,zookeeper2:2181,zookeeper3:2181,zookeeper4:2181,zookeeper5:2181
+
+
+  kafka5:
+    image: hyperledger/fabric-kafka
+    container_name: kafka5
+    hostname: kafka5
+    environment:
+      - KAFKA_MESSAGE_MAX_BYTES=103809024
+      - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+      - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+      - KAFKA_LOG_RETENTION_MS=-1
+      - KAFKA_BROKER_ID=5 #customize
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper1:2181,zookeeper2:2181,zookeeper3:2181,zookeeper4:2181,zookeeper5:2181
+
+  
+  orderer0.fusions360.com:
+    image: hyperledger/fabric-orderer
+    container_name: orderer0.fusions360.com
+    hostname: orderer0.fusions360.com
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=DEBUG
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/block/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - CONFIGTX_ORDERER_ORDERERTYPE=kafka
+      - CONFIGTX_ORDERER_KAFKA_BROKERS=[kafka1:9092,kafka2:9092,kafka3:9092,kafka4:9092,kafka5:9092]
+    volumes:
+      - ./:/var/hyperledger/orderer/block/
+      - ./crypto-config/ordererOrganizations/fusions360.com/orderers/orderer0.fusions360.com/msp/:/var/hyperledger/orderer/msp/
+  
+  orderer1.fusions360.com:
+    image: hyperledger/fabric-orderer
+    container_name: orderer1.fusions360.com
+    hostname: orderer1.fusions360.com
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=DEBUG
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/block/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - CONFIGTX_ORDERER_ORDERERTYPE=kafka
+      - CONFIGTX_ORDERER_KAFKA_BROKERS=[kafka1:9092,kafka2:9092,kafka3:9092,kafka4:9092,kafka5:9092]
+    volumes:
+      - ./:/var/hyperledger/orderer/block/
+      - ./crypto-config/ordererOrganizations/fusions360.com/orderers/orderer1.fusions360.com/msp/:/var/hyperledger/orderer/msp/
+
+  peer0org1.fusions361.com:
+    image: hyperledger/fabric-peer
+    container_name: peer0org1.fusions361.com
+    hostname: peer0org1.fusions361.com
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=e2ecli_default # must, 'folder name' + '_' + 'networks' ,networks default : 'default'
+      - CORE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_NETWORKID=fusions1
+      - CORE_PEER_ID=peer0org1.fusions361.com
+      - CORE_PEER_ADDRESS=peer0org1.fusions361.com:7051
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_MSPCONFIGPATH=/var/hyperledger/peer/msp/
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./cc02:/opt/gopath/src/cc02/
+      - ./:/etc/hyperledger/peer/
+      - ./crypto-config/peerOrganizations/org1.fusions361.com/peers/peer0.org1.fusions361.com/msp/:/var/hyperledger/peer/msp/
+    command: peer node start
+    ports:
+      - 7051:7051
+      - 7053:7053
+
+  peer0org2.fusions362.com:
+    image: hyperledger/fabric-peer
+    container_name: peer0org2.fusions362.com
+    hostname: peer0org2.fusions362.com
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=e2ecli_default # must, 'folder name' + '_' + 'networks' ,networks default : 'default'
+      - CORE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_NETWORKID=fusions2
+      - CORE_PEER_ID=peer0org2.fusions362.com
+      - CORE_PEER_ADDRESS=peer0org2.fusions362.com:7051
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_PEER_MSPCONFIGPATH=/var/hyperledger/peer/msp/
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./cc02:/opt/gopath/src/cc02/
+      - ./:/etc/hyperledger/peer/
+      - ./crypto-config/peerOrganizations/org2.fusions362.com/peers/peer0.org2.fusions362.com/msp/:/var/hyperledger/peer/msp/
+    command: peer node start 
+    ports:
+      - 8051:7051
+      - 8053:7053
+
+  cliOrg1:
+    image: hyperledger/fabric-tools
+    container_name: cliOrg1
+    hostname: cliOrg1
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_NETWORKID=fusions1
+      - CORE_PEER_ID=peer0org1.fusions361.com
+      - CORE_PEER_ADDRESS=peer0org1.fusions361.com:7051 #must
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_MSPCONFIGPATH=/var/hyperledger/peer/msp/
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./cc02/:/opt/gopath/src/github.com/hyperledger/fabric/cc02/
+      - ./:/etc/hyperledger/peer/
+      - ./crypto-config/peerOrganizations/org1.fusions361.com/users/Admin@org1.fusions361.com/msp/:/var/hyperledger/peer/msp/
+    command: sleep 1000000
+
+  cliOrg2:
+    image: hyperledger/fabric-tools
+    container_name: cliOrg2
+    hostname: cliOrg2
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_NETWORKID=fusions2
+      - CORE_PEER_ID=peer0org2.fusions362.com
+      - CORE_PEER_ADDRESS=peer0org2.fusions362.com:7051 #must
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_PEER_MSPCONFIGPATH=/var/hyperledger/peer/msp/
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./cc02/:/opt/gopath/src/github.com/hyperledger/fabric/cc02/
+      - ./:/etc/hyperledger/peer/
+      - ./crypto-config/peerOrganizations/org2.fusions362.com/users/Admin@org2.fusions362.com/msp/:/var/hyperledger/peer/msp/
+    command: sleep 1000000
+    extra_hosts: # setting hosts for container
+      - "GOOGELDNS:8.8.8.8" 
