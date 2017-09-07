@@ -1,3 +1,4 @@
+version: '2' 
 services:
   kafka2:
     image: hyperledger/fabric-kafka

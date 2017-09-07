@@ -1,3 +1,4 @@
+version: '2' 
 services:
   peer0org2.fusions362.com:
     image: hyperledger/fabric-peer
