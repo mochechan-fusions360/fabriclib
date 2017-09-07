@@ -1,0 +1,36 @@
+services:
+  kafka3:
+    image: hyperledger/fabric-kafka
+    container_name: kafka3
+    hostname: kafka3
+    environment:
+      - KAFKA_MESSAGE_MAX_BYTES=103809024
+      - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+      - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+      - KAFKA_LOG_RETENTION_MS=-1
+      - KAFKA_BROKER_ID=3 #customize
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper1:2181,zookeeper2:2181,zookeeper3:2181,zookeeper4:2181,zookeeper5:2181
+    ports:
+      - 9092:9092
+      - 9093:9093
+    extra_hosts:
+      - "zookeeper1:52.183.75.10"
+      - "zookeeper2:52.175.231.85"
+      - "zookeeper3:52.183.28.189"
+      - "zookeeper4:52.175.216.219"
+      - "zookeeper5:13.66.221.48"
+      - "kafka1:52.183.75.10"
+      - "kafka2:52.175.231.85"
+      - "kafka3:52.183.28.189"
+      - "kafka4:52.175.216.219"
+      - "kafka5:13.66.221.48"
+      - "orderer0.fusions360.com:52.183.75.10"
+      - "orderer1.fusions360.com:52.175.231.85"
+      - "peer0org1.fusions361.com:52.183.28.189"
+      - "peer0org2.fusions362.com:52.175.216.219"
+      - "ca1:13.66.221.48"
+      - "ca2:52.183.75.10"
+      - "cliOrg1:13.66.221.48"
+      - "cliOrg2:52.183.75.10"

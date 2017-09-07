@@ -1,0 +1,39 @@
+services:
+  zookeeper1:
+    image: hyperledger/fabric-zookeeper
+    container_name: zookeeper1
+    hostname: zookeeper1
+    environment:
+      - ZOO_USER=zookeeper #default
+      - ZOO_CONF_DIR=/conf #default
+      - ZOO_DATA_DIR=/data #default
+      - ZOO_DATA_LOG_DIR=/datalog #default
+      - ZOO_PORT=2181 #default
+      - ZOO_TICK_TIME=2000 #default
+      - ZOO_INIT_LIMIT=5 #default
+      - ZOO_SYNC_LIMIT=2 #default
+      - ZOO_MY_ID=1 #customize
+      - ZOO_SERVERS=server.1=zookeeper1:2888:3888 server.2=zookeeper2:2888:3888 server.3=zookeeper3:2888:3888 server.4=zookeeper4:2888:3888 server.5=zookeeper5:2888:3888 #customize
+    ports:
+      - 2181:2181
+      - 2888:2888
+      - 3888:3888
+    extra_hosts:
+      - "zookeeper1:52.183.75.10"
+      - "zookeeper2:52.175.231.85"
+      - "zookeeper3:52.183.28.189"
+      - "zookeeper4:52.175.216.219"
+      - "zookeeper5:13.66.221.48"
+      - "kafka1:52.183.75.10"
+      - "kafka2:52.175.231.85"
+      - "kafka3:52.183.28.189"
+      - "kafka4:52.175.216.219"
+      - "kafka5:13.66.221.48"
+      - "orderer0.fusions360.com:52.183.75.10"
+      - "orderer1.fusions360.com:52.175.231.85"
+      - "peer0org1.fusions361.com:52.183.28.189"
+      - "peer0org2.fusions362.com:52.175.216.219"
+      - "ca1:13.66.221.48"
+      - "ca2:52.183.75.10"
+      - "cliOrg1:13.66.221.48"
+      - "cliOrg2:52.183.75.10"
