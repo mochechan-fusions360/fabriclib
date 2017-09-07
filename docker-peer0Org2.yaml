@@ -1,16 +1,16 @@
 version: '2' 
 services:
-  peer0org2.fusions362.com:
+  peer0.org2.fusions362.com:
     image: hyperledger/fabric-peer
-    container_name: peer0org2.fusions362.com
-    hostname: peer0org2.fusions362.com
+    container_name: peer0.org2.fusions362.com
+    hostname: peer0.org2.fusions362.com
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=fabriclib_default # must, 'folder name' + '_' + 'networks' ,networks default : 'default'
       - CORE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_NETWORKID=fusions2
-      - CORE_PEER_ID=peer0org2.fusions362.com
-      - CORE_PEER_ADDRESS=peer0org2.fusions362.com:7051
+      - CORE_PEER_ID=peer0.org2.fusions362.com
+      - CORE_PEER_ADDRESS=peer0.org2.fusions362.com:7051
       - CORE_PEER_GOSSIP_ORGLEADER=false
       - CORE_PEER_PROFILE_ENABLED=true
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
@@ -42,7 +42,7 @@ services:
       - "orderer1.fusions360.com:52.175.216.219"
       - "couchdbPeer0Org1:13.66.221.48"
       - "couchdbPeer0Org2:52.183.75.10"
-      - "peer0org1.fusions361.com:52.175.231.85"
-      - "peer0org2.fusions362.com:52.183.28.189"
+      - "peer0.org1.fusions361.com:52.175.231.85"
+      - "peer0.org2.fusions362.com:52.183.28.189"
       - "cliOrg1:52.175.216.219"
       - "cliOrg2:13.66.221.48"

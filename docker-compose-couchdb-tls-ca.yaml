@@ -162,7 +162,30 @@ services:
       - KAFKA_MIN_INSYNC_REPLICAS=2
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper1:2181,zookeeper2:2181,zookeeper3:2181,zookeeper4:2181,zookeeper5:2181
 
-  
+  caOrg1:
+    image: hyperledger/fabric-ca
+    container_name: caOrg1
+    hostname: caOrg1
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=caOrg1
+      - FABRIC_CA_PRIVATEKEY=7c6abd0aeb71c5db5e003fabe313bdd60b841d2691745c89da7c9e3741877115_sk
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org1.fusions361.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/FABRIC_CA_PRIVATEKEY -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/org1.fusions361.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    
+  caOrg2:
+    image: hyperledger/fabric-ca
+    container_name: caOrg2
+    hostname: caOrg2
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=caOrg2
+      - FABRIC_CA_PRIVATEKEY=180ba90acc8a33cee7cb5487fa5d49389a266bb78c9625efc691329a509fe395_sk
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org1.fusions361.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/FABRIC_CA_PRIVATEKEY -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/org2.fusions362.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    
   orderer0.fusions360.com:
     image: hyperledger/fabric-orderer
     container_name: orderer0.fusions360.com
@@ -176,9 +199,17 @@ services:
       - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
       - CONFIGTX_ORDERER_ORDERERTYPE=kafka
       - CONFIGTX_ORDERER_KAFKA_BROKERS=[kafka1:9092,kafka2:9092,kafka3:9092,kafka4:9092,kafka5:9092]
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer0/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer0/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer0/tls/ca.crt,/var/hyperledger/orderer1/tls/ca.crt, /var/hyperledger/peer0Org1/tls/ca.crt, /var/hyperledger/peer0Org2/tls/ca.crt]
     volumes:
       - ./:/var/hyperledger/orderer/block/
       - ./crypto-config/ordererOrganizations/fusions360.com/orderers/orderer0.fusions360.com/msp/:/var/hyperledger/orderer/msp/
+      - ./crypto-config/ordererOrganizations/fusions360.com/orderers/orderer0.fusions360.com/tls/:/var/hyperledger/orderer0/tls/
+      - ./crypto-config/ordererOrganizations/fusions360.com/orderers/orderer1.fusions360.com/tls/:/var/hyperledger/orderer1/tls/
+      - ./crypto-config/peerOrganizations/org1.fusions361.com/peers/peer0.org1.fusions361.com/tls/:/var/hyperledger/peer0Org1/tls/
+      - ./crypto-config/peerOrganizations/org2.fusions362.com/peers/peer0.org2.fusions362.com/tls/:/var/hyperledger/peer0Org2/tls/
   
   orderer1.fusions360.com:
     image: hyperledger/fabric-orderer
@@ -193,9 +224,17 @@ services:
       - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
       - CONFIGTX_ORDERER_ORDERERTYPE=kafka
       - CONFIGTX_ORDERER_KAFKA_BROKERS=[kafka1:9092,kafka2:9092,kafka3:9092,kafka4:9092,kafka5:9092]
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer1/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer1/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer0/tls/ca.crt,/var/hyperledger/orderer1/tls/ca.crt, /var/hyperledger/peer0Org1/tls/ca.crt, /var/hyperledger/peer0Org2/tls/ca.crt]
     volumes:
       - ./:/var/hyperledger/orderer/block/
       - ./crypto-config/ordererOrganizations/fusions360.com/orderers/orderer1.fusions360.com/msp/:/var/hyperledger/orderer/msp/
+      - ./crypto-config/ordererOrganizations/fusions360.com/orderers/orderer0.fusions360.com/tls/:/var/hyperledger/orderer0/tls/
+      - ./crypto-config/ordererOrganizations/fusions360.com/orderers/orderer1.fusions360.com/tls/:/var/hyperledger/orderer1/tls/
+      - ./crypto-config/peerOrganizations/org1.fusions361.com/peers/peer0.org1.fusions361.com/tls/:/var/hyperledger/peer0Org1/tls/
+      - ./crypto-config/peerOrganizations/org2.fusions362.com/peers/peer0.org2.fusions362.com/tls/:/var/hyperledger/peer0Org2/tls/
 
   peer0.org1.fusions361.com:
     image: hyperledger/fabric-peer
@@ -213,11 +252,20 @@ services:
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       - CORE_PEER_LOCALMSPID=Org1MSP
       - CORE_PEER_MSPCONFIGPATH=/var/hyperledger/peer/msp/
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdbPeer0Org1:5984
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_KEY_FILE=/var/hyperledger/peer/tls/server.key
+      - CORE_PEER_TLS_CERT_FILE=/var/hyperledger/peer/tls/server.crt
+      - CORE_PEER_TLS_ROOTCERT_FILE=/var/hyperledger/peer/tls/ca.crt
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=fusions361
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=admin
     volumes:
       - /var/run/:/host/var/run/
       - ./cc02:/opt/gopath/src/cc02/
       - ./:/etc/hyperledger/peer/
       - ./crypto-config/peerOrganizations/org1.fusions361.com/peers/peer0.org1.fusions361.com/msp/:/var/hyperledger/peer/msp/
+      - ./crypto-config/peerOrganizations/org1.fusions361.com/peers/peer0.org1.fusions361.com/tls/:/var/hyperledger/peer/tls/
     command: peer node start
     ports:
       - 7051:7051
@@ -239,12 +287,21 @@ services:
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       - CORE_PEER_LOCALMSPID=Org2MSP
       - CORE_PEER_MSPCONFIGPATH=/var/hyperledger/peer/msp/
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdbPeer0Org2:5984
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_KEY_FILE=/var/hyperledger/peer/tls/server.key
+      - CORE_PEER_TLS_CERT_FILE=/var/hyperledger/peer/tls/server.crt
+      - CORE_PEER_TLS_ROOTCERT_FILE=/var/hyperledger/peer/tls/ca.crt
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=fusions362
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=admin
     volumes:
       - /var/run/:/host/var/run/
       - ./cc02:/opt/gopath/src/cc02/
       - ./:/etc/hyperledger/peer/
       - ./crypto-config/peerOrganizations/org2.fusions362.com/peers/peer0.org2.fusions362.com/msp/:/var/hyperledger/peer/msp/
-    command: peer node start 
+      - ./crypto-config/peerOrganizations/org2.fusions362.com/peers/peer0.org2.fusions362.com/tls/:/var/hyperledger/peer/tls/
+    command: peer node start
     ports:
       - 8051:7051
       - 8053:7053
@@ -265,11 +322,17 @@ services:
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       - CORE_PEER_LOCALMSPID=Org1MSP
       - CORE_PEER_MSPCONFIGPATH=/var/hyperledger/peer/msp/
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_KEY_FILE=/var/hyperledger/peer/tls/server.key
+      - CORE_PEER_TLS_CERT_FILE=/var/hyperledger/peer/tls/server.crt
+      - CORE_PEER_TLS_ROOTCERT_FILE=/var/hyperledger/peer/tls/ca.crt
     volumes:
       - /var/run/:/host/var/run/
       - ./cc02/:/opt/gopath/src/github.com/hyperledger/fabric/cc02/
-      - ./:/etc/hyperledger/peer/
+      - ./:/etc/hyperledger/
       - ./crypto-config/peerOrganizations/org1.fusions361.com/users/Admin@org1.fusions361.com/msp/:/var/hyperledger/peer/msp/
+      - ./crypto-config/ordererOrganizations/fusions360.com/orderers/orderer0.fusions360.com/msp/tlscacerts/:/var/hyperledger/peer/cafile/
+      - ./crypto-config/peerOrganizations/org1.fusions361.com/peers/peer0.org1.fusions361.com/tls/:/var/hyperledger/peer/tls/
     command: sleep 1000000
 
   cliOrg2:
@@ -288,9 +351,35 @@ services:
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       - CORE_PEER_LOCALMSPID=Org2MSP
       - CORE_PEER_MSPCONFIGPATH=/var/hyperledger/peer/msp/
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_KEY_FILE=/var/hyperledger/peer/tls/server.key
+      - CORE_PEER_TLS_CERT_FILE=/var/hyperledger/peer/tls/server.crt
+      - CORE_PEER_TLS_ROOTCERT_FILE=/var/hyperledger/peer/tls/ca.crt
     volumes:
       - /var/run/:/host/var/run/
       - ./cc02/:/opt/gopath/src/github.com/hyperledger/fabric/cc02/
-      - ./:/etc/hyperledger/peer/
+      - ./:/etc/hyperledger/
       - ./crypto-config/peerOrganizations/org2.fusions362.com/users/Admin@org2.fusions362.com/msp/:/var/hyperledger/peer/msp/
+      - ./crypto-config/ordererOrganizations/fusions360.com/orderers/orderer0.fusions360.com/msp/tlscacerts/:/var/hyperledger/peer/cafile/
+      - ./crypto-config/peerOrganizations/org2.fusions362.com/peers/peer0.org2.fusions362.com/tls/:/var/hyperledger/peer/tls/
     command: sleep 1000000
+
+  couchdbPeer0Org1:
+    image: hyperledger/fabric-couchdb
+    container_name: couchdbPeer0Org1
+    hostname: couchdbPeer0Org1
+    environment:
+      - COUCHDB_USER=fusions361
+      - COUCHDB_PASSWORD=admin
+    ports:
+      - "5984:5984"
+
+  couchdbPeer0Org2:
+    image: hyperledger/fabric-couchdb
+    container_name: couchdbPeer0Org2
+    hostname: couchdbPeer0Org2
+    environment:
+      - COUCHDB_USER=fusions362
+      - COUCHDB_PASSWORD=admin
+    ports:
+      - "6984:5984"

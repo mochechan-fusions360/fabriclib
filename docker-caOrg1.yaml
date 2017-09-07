@@ -1,24 +1,16 @@
 version: '2' 
 services:
-  zookeeper4:
-    image: hyperledger/fabric-zookeeper
-    container_name: zookeeper4
-    hostname: zookeeper4
+  caOrg1:
+    image: hyperledger/fabric-ca
+    container_name: caOrg1
+    hostname: caOrg1
     environment:
-      - ZOO_USER=zookeeper #default
-      - ZOO_CONF_DIR=/conf #default
-      - ZOO_DATA_DIR=/data #default
-      - ZOO_DATA_LOG_DIR=/datalog #default
-      - ZOO_PORT=2181 #default
-      - ZOO_TICK_TIME=2000 #default
-      - ZOO_INIT_LIMIT=5 #default
-      - ZOO_SYNC_LIMIT=2 #default
-      - ZOO_MY_ID=4 #customize
-      - ZOO_SERVERS=server.1=zookeeper1:2888:3888 server.2=zookeeper2:2888:3888 server.3=zookeeper3:2888:3888 server.4=zookeeper4:2888:3888 server.5=zookeeper5:2888:3888 #customize
-    ports:
-      - 2181:2181
-      - 2888:2888
-      - 3888:3888
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=caOrg1
+      - FABRIC_CA_PRIVATEKEY=7c6abd0aeb71c5db5e003fabe313bdd60b841d2691745c89da7c9e3741877115_sk
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org1.fusions361.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/FABRIC_CA_PRIVATEKEY -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/org1.fusions361.com/ca/:/etc/hyperledger/fabric-ca-server-config
     extra_hosts:
       - "zookeeper1:52.183.75.10"
       - "zookeeper2:52.175.231.85"

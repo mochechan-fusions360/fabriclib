@@ -162,10 +162,6 @@ services:
       - KAFKA_MIN_INSYNC_REPLICAS=2
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper1:2181,zookeeper2:2181,zookeeper3:2181,zookeeper4:2181,zookeeper5:2181
 
-  ca1:
-    image: hyperledger/fabric-ca
-    container_name: ca1
-
   orderer0.fusions360.com:
     image: hyperledger/fabric-orderer
     container_name: orderer0.fusions360.com
@@ -216,17 +212,17 @@ services:
       - ./crypto-config/peerOrganizations/org1.fusions361.com/peers/peer0.org1.fusions361.com/tls/:/var/hyperledger/peer0Org1/tls/
       - ./crypto-config/peerOrganizations/org2.fusions362.com/peers/peer0.org2.fusions362.com/tls/:/var/hyperledger/peer0Org2/tls/
 
-  peer0org1.fusions361.com:
+  peer0.org1.fusions361.com:
     image: hyperledger/fabric-peer
-    container_name: peer0org1.fusions361.com
-    hostname: peer0org1.fusions361.com
+    container_name: peer0.org1.fusions361.com
+    hostname: peer0.org1.fusions361.com
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=fabriclib_default # must, 'folder name' + '_' + 'networks' ,networks default : 'default'
       - CORE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_NETWORKID=fusions1
-      - CORE_PEER_ID=peer0org1.fusions361.com
-      - CORE_PEER_ADDRESS=peer0org1.fusions361.com:7051
+      - CORE_PEER_ID=peer0.org1.fusions361.com
+      - CORE_PEER_ADDRESS=peer0.org1.fusions361.com:7051
       - CORE_PEER_GOSSIP_ORGLEADER=false
       - CORE_PEER_PROFILE_ENABLED=true
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
@@ -238,6 +234,8 @@ services:
       - CORE_PEER_TLS_KEY_FILE=/var/hyperledger/peer/tls/server.key
       - CORE_PEER_TLS_CERT_FILE=/var/hyperledger/peer/tls/server.crt
       - CORE_PEER_TLS_ROOTCERT_FILE=/var/hyperledger/peer/tls/ca.crt
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=fusions361
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=admin
     volumes:
       - /var/run/:/host/var/run/
       - ./cc02:/opt/gopath/src/cc02/
@@ -249,17 +247,17 @@ services:
       - 7051:7051
       - 7053:7053
 
-  peer0org2.fusions362.com:
+  peer0.org2.fusions362.com:
     image: hyperledger/fabric-peer
-    container_name: peer0org2.fusions362.com
-    hostname: peer0org2.fusions362.com
+    container_name: peer0.org2.fusions362.com
+    hostname: peer0.org2.fusions362.com
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=fabriclib_default # must, 'folder name' + '_' + 'networks' ,networks default : 'default'
       - CORE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_NETWORKID=fusions2
-      - CORE_PEER_ID=peer0org2.fusions362.com
-      - CORE_PEER_ADDRESS=peer0org2.fusions362.com:7051
+      - CORE_PEER_ID=peer0.org2.fusions362.com
+      - CORE_PEER_ADDRESS=peer0.org2.fusions362.com:7051
       - CORE_PEER_GOSSIP_ORGLEADER=false
       - CORE_PEER_PROFILE_ENABLED=true
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
@@ -271,6 +269,8 @@ services:
       - CORE_PEER_TLS_KEY_FILE=/var/hyperledger/peer/tls/server.key
       - CORE_PEER_TLS_CERT_FILE=/var/hyperledger/peer/tls/server.crt
       - CORE_PEER_TLS_ROOTCERT_FILE=/var/hyperledger/peer/tls/ca.crt
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=fusions362
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=admin
     volumes:
       - /var/run/:/host/var/run/
       - ./cc02:/opt/gopath/src/cc02/
@@ -291,8 +291,8 @@ services:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_NETWORKID=fusions1
-      - CORE_PEER_ID=peer0org1.fusions361.com
-      - CORE_PEER_ADDRESS=peer0org1.fusions361.com:7051 #must
+      - CORE_PEER_ID=peer0.org1.fusions361.com
+      - CORE_PEER_ADDRESS=peer0.org1.fusions361.com:7051 #must
       - CORE_PEER_GOSSIP_ORGLEADER=false
       - CORE_PEER_PROFILE_ENABLED=true
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
@@ -306,7 +306,9 @@ services:
       - /var/run/:/host/var/run/
       - ./cc02/:/opt/gopath/src/github.com/hyperledger/fabric/cc02/
       - ./:/etc/hyperledger/
-      - ./crypto-config/peerOrganizations/org1.fusions361.com/users/Admin@org1.fusions361.com/:/var/hyperledger/peer/
+      - ./crypto-config/peerOrganizations/org1.fusions361.com/users/Admin@org1.fusions361.com/msp/:/var/hyperledger/peer/msp/
+      - ./crypto-config/ordererOrganizations/fusions360.com/orderers/orderer0.fusions360.com/msp/tlscacerts/:/var/hyperledger/peer/cafile/
+      - ./crypto-config/peerOrganizations/org1.fusions361.com/peers/peer0.org1.fusions361.com/tls/:/var/hyperledger/peer/tls/
     command: sleep 1000000
 
   cliOrg2:
@@ -318,8 +320,8 @@ services:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_NETWORKID=fusions2
-      - CORE_PEER_ID=peer0org2.fusions362.com
-      - CORE_PEER_ADDRESS=peer0org2.fusions362.com:7051 #must
+      - CORE_PEER_ID=peer0.org2.fusions362.com
+      - CORE_PEER_ADDRESS=peer0.org2.fusions362.com:7051 #must
       - CORE_PEER_GOSSIP_ORGLEADER=false
       - CORE_PEER_PROFILE_ENABLED=true
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
@@ -333,13 +335,18 @@ services:
       - /var/run/:/host/var/run/
       - ./cc02/:/opt/gopath/src/github.com/hyperledger/fabric/cc02/
       - ./:/etc/hyperledger/
-      - ./crypto-config/peerOrganizations/org2.fusions362.com/users/Admin@org2.fusions362.com/:/var/hyperledger/peer/
+      - ./crypto-config/peerOrganizations/org2.fusions362.com/users/Admin@org2.fusions362.com/msp/:/var/hyperledger/peer/msp/
+      - ./crypto-config/ordererOrganizations/fusions360.com/orderers/orderer0.fusions360.com/msp/tlscacerts/:/var/hyperledger/peer/cafile/
+      - ./crypto-config/peerOrganizations/org2.fusions362.com/peers/peer0.org2.fusions362.com/tls/:/var/hyperledger/peer/tls/
     command: sleep 1000000
 
   couchdbPeer0Org1:
     image: hyperledger/fabric-couchdb
     container_name: couchdbPeer0Org1
     hostname: couchdbPeer0Org1
+    environment:
+      - COUCHDB_USER=fusions361
+      - COUCHDB_PASSWORD=admin
     ports:
       - "5984:5984"
 
@@ -347,5 +354,8 @@ services:
     image: hyperledger/fabric-couchdb
     container_name: couchdbPeer0Org2
     hostname: couchdbPeer0Org2
+    environment:
+      - COUCHDB_USER=fusions362
+      - COUCHDB_PASSWORD=admin
     ports:
       - "6984:5984"
