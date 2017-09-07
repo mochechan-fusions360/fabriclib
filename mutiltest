@@ -36,6 +36,6 @@ docker-compose -f docker-zookeeper4.yaml up &
 docker-compose -f docker-kafka4.yaml up &
 docker-compose -f docker-peer2.yaml up &
 
-docker-compose -f docker-zookeeper4.yaml up &
-docker-compose -f docker-kafka4.yaml up &
+docker-compose -f docker-zookeeper5.yaml up &
+docker-compose -f docker-kafka5.yaml up &
 docker-compose -f docker-cliOrg2.yaml up &

@@ -1,9 +1,9 @@
 version: '2' 
 services:
-  zookeeper1:
+  zookeeper4:
     image: hyperledger/fabric-zookeeper
-    container_name: zookeeper1
-    hostname: zookeeper1
+    container_name: zookeeper4
+    hostname: zookeeper4
     environment:
       - ZOO_USER=zookeeper #default
       - ZOO_CONF_DIR=/conf #default
@@ -13,7 +13,7 @@ services:
       - ZOO_TICK_TIME=2000 #default
       - ZOO_INIT_LIMIT=5 #default
       - ZOO_SYNC_LIMIT=2 #default
-      - ZOO_MY_ID=1 #customize
+      - ZOO_MY_ID=4 #customize
       - ZOO_SERVERS=server.1=zookeeper1:2888:3888 server.2=zookeeper2:2888:3888 server.3=zookeeper3:2888:3888 server.4=zookeeper4:2888:3888 server.5=zookeeper5:2888:3888 #customize
     ports:
       - 2181:2181
