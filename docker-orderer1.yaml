@@ -18,10 +18,6 @@ services:
       - ./crypto-config/ordererOrganizations/fusions360.com/orderers/orderer1.fusions360.com/msp/:/var/hyperledger/orderer/msp/
     ports:
       - 7050:7050
-      - 7051:7051
-      - 7052:7052
-      - 7053:7053
-      - 7054:7054
     extra_hosts:
       - "zookeeper1:52.183.75.10"
       - "zookeeper2:52.175.231.85"
@@ -33,11 +29,13 @@ services:
       - "kafka3:52.183.28.189"
       - "kafka4:52.175.216.219"
       - "kafka5:13.66.221.48"
-      - "orderer0.fusions360.com:52.183.75.10"
-      - "orderer1.fusions360.com:52.175.231.85"
-      - "peer0org1.fusions361.com:52.183.28.189"
-      - "peer0org2.fusions362.com:52.175.216.219"
-      - "ca1:13.66.221.48"
-      - "ca2:52.183.75.10"
-      - "cliOrg1:13.66.221.48"
-      - "cliOrg2:52.183.75.10"
+      - "ca1:52.183.75.10"
+      - "ca2:52.175.231.85"
+      - "orderer0.fusions360.com:52.183.28.189"
+      - "orderer1.fusions360.com:52.175.216.219"
+      - "couchdbPeer0Org1:13.66.221.48"
+      - "couchdbPeer0Org2:52.183.75.10"
+      - "peer0org1.fusions361.com:52.175.231.85"
+      - "peer0org2.fusions362.com:52.183.28.189"
+      - "cliOrg1:52.175.216.219"
+      - "cliOrg2:13.66.221.48"

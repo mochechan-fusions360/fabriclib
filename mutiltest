@@ -19,6 +19,9 @@
 
 docker ps -aq |xargs docker rm -f
 
+ssh ubuntu@13.66.221.48
+ssh ubuntu@52.183.75.10
+
 docker-compose -f docker-zookeeper1.yaml up &
 docker-compose -f docker-kafka1.yaml up &
 docker-compose -f docker-orderer0.yaml up &
@@ -30,12 +33,12 @@ docker-compose -f docker-orderer1.yaml up &
 
 docker-compose -f docker-zookeeper3.yaml up &
 docker-compose -f docker-kafka3.yaml up &
-docker-compose -f docker-peer1.yaml up &
+docker-compose -f docker-peer0Org1.yaml up &
 
 docker-compose -f docker-zookeeper4.yaml up &
 docker-compose -f docker-kafka4.yaml up &
-docker-compose -f docker-peer2.yaml up &
+docker-compose -f docker-peer0Org2.yaml up &
 
 docker-compose -f docker-zookeeper5.yaml up &
 docker-compose -f docker-kafka5.yaml up &
-docker-compose -f docker-cliOrg2.yaml up &
+docker-compose -f docker-cliOrg1.yaml up &
