@@ -1,0 +1,48 @@
+services:
+  cliOrg1:
+    image: hyperledger/fabric-tools
+    container_name: cliOrg1
+    hostname: cliOrg1
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_NETWORKID=fusions1
+      - CORE_PEER_ID=peer0org1.fusions361.com
+      - CORE_PEER_ADDRESS=peer0org1.fusions361.com:7051 #must
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_MSPCONFIGPATH=/var/hyperledger/peer/msp/
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./cc02/:/opt/gopath/src/github.com/hyperledger/fabric/cc02/
+      - ./:/etc/hyperledger/peer/
+      - ./crypto-config/peerOrganizations/org1.fusions361.com/users/Admin@org1.fusions361.com/msp/:/var/hyperledger/peer/msp/
+    command: sleep 1000000
+    ports:
+      - 7050:7050
+      - 7051:7051
+      - 7052:7052
+      - 7053:7053
+      - 7054:7054
+    extra_hosts:
+      - "zookeeper1:52.183.75.10"
+      - "zookeeper2:52.175.231.85"
+      - "zookeeper3:52.183.28.189"
+      - "zookeeper4:52.175.216.219"
+      - "zookeeper5:13.66.221.48"
+      - "kafka1:52.183.75.10"
+      - "kafka2:52.175.231.85"
+      - "kafka3:52.183.28.189"
+      - "kafka4:52.175.216.219"
+      - "kafka5:13.66.221.48"
+      - "orderer0.fusions360.com:52.183.75.10"
+      - "orderer1.fusions360.com:52.175.231.85"
+      - "peer0org1.fusions361.com:52.183.28.189"
+      - "peer0org2.fusions362.com:52.175.216.219"
+      - "ca1:13.66.221.48"
+      - "ca2:52.183.75.10"
+      - "cliOrg1:13.66.221.48"
+      - "cliOrg2:52.183.75.10"
