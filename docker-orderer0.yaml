@@ -13,9 +13,17 @@ services:
       - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
       - CONFIGTX_ORDERER_ORDERERTYPE=kafka
       - CONFIGTX_ORDERER_KAFKA_BROKERS=[kafka1:9092,kafka2:9092,kafka3:9092,kafka4:9092,kafka5:9092]
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer0/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer0/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer0/tls/ca.crt,/var/hyperledger/orderer1/tls/ca.crt, /var/hyperledger/peer0Org1/tls/ca.crt, /var/hyperledger/peer0Org2/tls/ca.crt]
     volumes:
       - ./:/var/hyperledger/orderer/block/
       - ./crypto-config/ordererOrganizations/fusions360.com/orderers/orderer0.fusions360.com/msp/:/var/hyperledger/orderer/msp/
+      - ./crypto-config/ordererOrganizations/fusions360.com/orderers/orderer0.fusions360.com/tls/:/var/hyperledger/orderer0/tls/
+      - ./crypto-config/ordererOrganizations/fusions360.com/orderers/orderer1.fusions360.com/tls/:/var/hyperledger/orderer1/tls/
+      - ./crypto-config/peerOrganizations/org1.fusions361.com/peers/peer0.org1.fusions361.com/tls/:/var/hyperledger/peer0Org1/tls/
+      - ./crypto-config/peerOrganizations/org2.fusions362.com/peers/peer0.org2.fusions362.com/tls/:/var/hyperledger/peer0Org2/tls/
     ports:
       - 7050:7050
     extra_hosts:

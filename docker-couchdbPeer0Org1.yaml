@@ -4,6 +4,9 @@ services:
     image: hyperledger/fabric-couchdb
     container_name: couchdbPeer0Org1
     hostname: couchdbPeer0Org1
+    environment:
+      - COUCHDB_USER=fusions361
+      - COUCHDB_PASSWORD=admin
     ports:
       - "5984:5984"
     extra_hosts:
